@@ -1,0 +1,28 @@
+{
+  "name": "Node.js Complit API Container",
+  "workspaceFolder": "/code",
+  "mounts": [
+    {
+      "source": "${localWorkspaceFolder}",
+      "target": "/code",
+      "type": "bind"
+    }
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "Gruntfuggly.todo-tree",
+        "Prisma.prisma"
+      ],
+      "settings": {
+      }
+    }
+  },
+  "postCreateCommand": "if [ -f package-lock.json ]; then pnpm install; fi",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "complit_api",
+  "runServices": [],
+  "overrideCommand": true
+}

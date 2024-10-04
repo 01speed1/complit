@@ -1,0 +1,15 @@
+services:
+  complit_api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    environment:
+      PORT: 3001
+    ports:
+      - '3001:3001'
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
