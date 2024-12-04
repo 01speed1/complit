@@ -1,48 +1,32 @@
+# Complit
+
 ## Description
 
+**Complit** is an application designed to help you save and track your projects. The idea came from the need to have a place to jot down and organize ideas to avoid losing them. Although it was initially an abandoned project, it has been resumed with the goal of providing a useful and efficient tool.
 
-## Project setup
+## Objective
 
-```bash
-$ pnpm install
-```
+The main objective of Complit is to allow you to create projects easily and creatively, with a pleasant and cross-platform interface. The application will enable you to add details and increase the progress of your projects effortlessly.
 
-## Compile and run the project
+## Features
 
-```bash
-# development
-$ pnpm run start
+- Project creation and management.
+- Intuitive and attractive user interface.
+- Cross-platform support.
+- Ability to add details and update project progress.
 
-# watch mode
-$ pnpm run start:dev
+## Installation
 
-# production mode
-$ pnpm run start:prod
-```
+Instructions to install and configure the application.
 
-## Run tests
+## Usage
 
-```bash
-# unit tests
-$ pnpm run test
+Quick guide on how to use the application to create and manage your projects.
 
-# e2e tests
-$ pnpm run test:e2e
+## Contributions
 
-# test coverage
-$ pnpm run test:cov
-```
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
+Information on how to contribute to the development of Complit.
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+Details about the license under which Complit is distributed.

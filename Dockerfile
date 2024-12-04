@@ -1,12 +1,11 @@
-FROM node:22
+FROM node:20
 
 WORKDIR /code
 
 COPY package*.json ./
 
-RUN npm install -g pnpm && npm install -g @nestjs/cli
-
-RUN if [ ! -d node_modules ] && [ -f package.json ] && [ -f pnpm-lock.yaml ] && [ -f package-lock,json ]; then pnpm install; fi
+RUN npm install -g pnpm \
+  && npm install -g @nestjs/cli
 
 COPY . .
 

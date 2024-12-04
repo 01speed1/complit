@@ -14,15 +14,21 @@
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
         "Gruntfuggly.todo-tree",
-        "Prisma.prisma"
+        "Prisma.prisma",
+        "humao.rest-client",
+        "streetsidesoftware.code-spell-checker",
+        "oderwat.indent-rainbow",
+        "christian-kohler.path-intellisense",
+        "shardulm94.trailing-spaces"
       ],
-      "settings": {
-      }
+      "settings": {}
     }
   },
   "postCreateCommand": "if [ -f package-lock.json ]; then pnpm install; fi",
   "dockerComposeFile": "../docker-compose.yml",
   "service": "complit_api",
-  "runServices": [],
+  "runServices": [
+    "postgres"
+  ],
   "overrideCommand": true
 }

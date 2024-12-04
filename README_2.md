@@ -11,17 +11,19 @@ Table Project {
   description text
   start_date date
   end_date date [note: "Optional, set when completed"]
-  progress int [note: "Value between 0 and 100"]
+  progress int [note: "Calculated based on completed tasks"]
   status varchar [note: "e.g. In Progress, Completed"]
   user_id int [ref: > User.id]
 }
 
-Table ProgressUpdate {
+Table Task {
   id int [pk, increment]
   project_id int [ref: > Project.id]
-  date datetime
-  progress int [note: "Progress increase in percentage"]
+  title varchar
   description text
+  progress_contribution int [note: "Progress contribution in percentage"]
+  status varchar [note: "e.g. Pending, In Progress, Completed"]
+  due_date date [note: "Optional"]
 }
 
 Table Completion {

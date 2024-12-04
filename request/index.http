@@ -1,0 +1,42 @@
+GET http://localhost:3001/
+
+### Get Users
+GET http://localhost:3001/users
+
+### Create User
+POST http://localhost:3001/users
+Content-Type: application/json
+
+{
+  "email": "new_user@example.com",
+  "password": "securepassword",
+  "name": "Test"
+}
+
+### Create Project
+POST http://localhost:3001/projects
+Content-Type: application/json
+
+{
+  "title": "New Project",
+  "description": "This is a new project",
+  "start_date": "2023-10-01T00:00:00.000Z",
+  "end_date": "2023-12-31T00:00:00.000Z",
+  "progress": 50,
+  "status": "In Progress",
+  "user_id": 1
+}
+
+### Create Task
+POST http://localhost:3001/tasks
+Content-Type: application/json
+
+{
+  "title": "New Task",
+  "description": "This is a new task",
+  "progress_contribution": 10,
+  "status": "Not Started",
+  "due_date": "2023-11-01T00:00:00.000Z",
+  "project_id": 1
+}
+
