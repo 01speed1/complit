@@ -22,7 +22,6 @@ Content-Type: application/json
   "description": "This is a new project",
   "start_date": "2023-10-01T00:00:00.000Z",
   "end_date": "2023-12-31T00:00:00.000Z",
-  "progress": 50,
   "status": "In Progress",
   "user_id": 1
 }
@@ -39,4 +38,6 @@ Content-Type: application/json
   "due_date": "2023-11-01T00:00:00.000Z",
   "project_id": 1
 }
+
+
 

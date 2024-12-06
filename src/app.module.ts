@@ -7,9 +7,16 @@ import { PrismaModule } from './prisma/prisma.module';
 import { UsersModule } from './users/users.module';
 import { ProjectsModule } from './projects/projects.module';
 import { TasksModule } from './tasks/tasks.module';
+import { CompletionModule } from './completion/completion.module';
 
 @Module({
-  imports: [ProjectsModule, UsersModule, PrismaModule, TasksModule],
+  imports: [
+    ProjectsModule,
+    UsersModule,
+    PrismaModule,
+    TasksModule,
+    CompletionModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
