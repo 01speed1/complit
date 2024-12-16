@@ -7,5 +7,5 @@ export class CreateProjectDto {
   end_date?: Date;
   progress: number;
   status: ProjectStatus;
-  user_id: number;
+  user_id?: number;
 }

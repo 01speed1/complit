@@ -2,7 +2,10 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class AppService {
-  getHello(): string {
-    return 'Hello World!';
+  getHello(request) {
+    if (!request.user) {
+      return 'No google user';
+    }
+    return request.user;
   }
 }

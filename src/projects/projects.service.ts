@@ -7,14 +7,21 @@ const prisma = new PrismaClient();
 
 @Injectable()
 export class ProjectsService {
+  async findAllByUser(userId: number): Promise<any[]> {
+    return prisma.project.findMany({
+      where: {
+        user_id: userId,
+      },
+    });
+  }
+
   async create(createProjectDto: CreateProjectDto): Promise<any> {
     const data = {
       ...createProjectDto,
       status: ProjectStatus.PENDING,
+      user_id: createProjectDto.user_id ?? undefined,
     };
 
-    return prisma.project.create({
-      data,
-    });
+    return prisma.project.create({ data });
   }
 }

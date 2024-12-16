@@ -16,8 +16,8 @@ enum TaskStatus {
 model User {
   id       Int       @id @default(autoincrement())
   name     String
-  password String
   email    String    @unique
+  googleId String    @unique
   Project  Project[]
 }
 
@@ -27,7 +27,7 @@ model Project {
   description String
   start_date  DateTime
   end_date    DateTime?
-  progress    Int
+  progress    Int          @default(0)
   status      TaskStatus   @default(Pending)
   user_id     Int
   user        User         @relation(fields: [user_id], references: [id])

@@ -16,15 +16,19 @@ Content-Type: application/json
 ### Create Project
 POST http://localhost:3001/projects
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjAxc3BlZWQxQGdtYWlsLmNvbSIsInN1YiI6NCwiaWF0IjoxNzM0MzIzODMwLCJleHAiOjE3MzQzMjc0MzB9.pjBt7pAGMyMqnmYfTdl9kpZGYNdNhihgLDgrthaD5TY
 
 {
   "title": "New Project",
   "description": "This is a new project",
   "start_date": "2023-10-01T00:00:00.000Z",
   "end_date": "2023-12-31T00:00:00.000Z",
-  "status": "In Progress",
-  "user_id": 1
+  "status": "In Progress"
 }
+
+### Get User Projects
+GET http://localhost:3001/projects
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjAxc3BlZWQxQGdtYWlsLmNvbSIsInN1YiI6NCwiaWF0IjoxNzM0MzIzODMwLCJleHAiOjE3MzQzMjc0MzB9.pjBt7pAGMyMqnmYfTdl9kpZGYNdNhihgLDgrthaD5TY
 
 ### Create Task
 POST http://localhost:3001/tasks
@@ -37,6 +41,17 @@ Content-Type: application/json
   "status": "Not Started",
   "due_date": "2023-11-01T00:00:00.000Z",
   "project_id": 1
+}
+
+### Create Completion
+POST http://localhost:3001/completions
+Content-Type: application/json
+
+{
+  "project_id": 1,
+  "completion_date": "2023-11-01T00:00:00.000Z",
+  "proof_url": "http://example.com/proof",
+  "proof_image": "http://example.com/proof_image.jpg"
 }
 
 

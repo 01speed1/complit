@@ -6,6 +6,9 @@ services:
     environment:
       PORT: 3001
       DATABASE_URL: postgres://postgres:postgres@postgres:5432/complit_db
+      #GOOGLE_CLIENT_ID: your-google-client-id
+      #GOOGLE_CLIENT_SECRET: your-google-client-secret
+      #JWT_SECRET: your-jwt-secret
     ports:
       - '3001:3001'
     networks:
