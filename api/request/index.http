@@ -16,7 +16,7 @@ Content-Type: application/json
 ### Create Project
 POST http://localhost:3001/projects
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjAxc3BlZWQxQGdtYWlsLmNvbSIsInN1YiI6NCwiaWF0IjoxNzM0MzIzODMwLCJleHAiOjE3MzQzMjc0MzB9.pjBt7pAGMyMqnmYfTdl9kpZGYNdNhihgLDgrthaD5TY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjAxc3BlZWQxQGdtYWlsLmNvbSIsInN1YiI6MSwiaWF0IjoxNzM0NDA5MTE2LCJleHAiOjE3MzQ0MTI3MTZ9.faBpPy8CPYp1_990lw973IXe96c58QtmK0kqWE9QKXw
 
 {
   "title": "New Project",

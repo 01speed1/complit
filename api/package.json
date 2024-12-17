@@ -26,6 +26,7 @@
     "@nestjs/jwt": "^10.2.0",
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.0.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
