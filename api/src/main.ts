@@ -7,13 +7,15 @@ async function bootstrap() {
 
   app.use(
     cors({
-      origin: 'http://localhost:3000',
+      // origin: 'http://localhost:3000',
+      origin: '*',
       credentials: true,
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     }),
   );
 
   const port = process.env.PORT || 3001;
-  await app.listen(port);
+  const host = '0.0.0.0';
+  await app.listen(port, host);
 }
 bootstrap();

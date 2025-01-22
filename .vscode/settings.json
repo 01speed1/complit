@@ -3,6 +3,9 @@
     "autoincrement",
     "dbaeumer",
     "esbenp",
-    "postgres"
+    "kohler",
+    "oderwat",
+    "postgres",
+    "shardulm"
   ]
 }

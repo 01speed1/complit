@@ -1,8 +1,8 @@
-import { Injectable } from "@nestjs/common";
-import { PrismaClient } from "@prisma/client";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { FindUserDto } from "./dto/find-user.dto";
-import { User } from "@prisma/client";
+import { Injectable } from '@nestjs/common';
+import { PrismaClient } from '@prisma/client';
+import { CreateUserDto } from './dto/create-user.dto';
+import { FindUserDto } from './dto/find-user.dto';
+import { User } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -10,7 +10,7 @@ const prisma = new PrismaClient();
 export class UsersService {
   constructor() {}
 
-  async findAll(): Promise<Omit<User, "googleId">[]> {
+  async findAll(): Promise<Omit<User, 'googleId'>[]> {
     const users = await prisma.user.findMany({
       select: {
         id: true,

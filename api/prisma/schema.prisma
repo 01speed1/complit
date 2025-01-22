@@ -22,17 +22,19 @@ model User {
 }
 
 model Project {
-  id          Int          @id @default(autoincrement())
-  title       String
-  description String
-  start_date  DateTime
-  end_date    DateTime?
-  progress    Int          @default(0)
-  status      TaskStatus   @default(Pending)
-  user_id     Int
-  user        User         @relation(fields: [user_id], references: [id])
-  Task        Task[]
-  Completion  Completion[]
+  id                    Int          @id @default(autoincrement())
+  title                 String
+  description           String
+  start_date            DateTime
+  end_date              DateTime?
+  is_working            Boolean      @default(false)
+  is_working_start_date DateTime?
+  progress              Int          @default(0)
+  status                TaskStatus   @default(Pending) // TODO: I'm not using this field, remove when you sure you don't need it
+  user_id               Int
+  user                  User         @relation(fields: [user_id], references: [id])
+  Task                  Task[]
+  Completion            Completion[]
 }
 
 model Task {
@@ -43,6 +45,7 @@ model Task {
   progress_contribution Int
   status                TaskStatus @default(Pending)
   due_date              DateTime?
+  created_at            DateTime   @default(now())
   project               Project    @relation(fields: [project_id], references: [id])
 }
 

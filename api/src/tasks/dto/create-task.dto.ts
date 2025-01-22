@@ -7,4 +7,5 @@ export class CreateTaskDto {
   progress_contribution: number;
   status?: TaskStatus;
   due_date?: Date;
+  created_at: Date;
 }

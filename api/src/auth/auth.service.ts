@@ -37,4 +37,27 @@ export class AuthService {
       access_token: this.jwtService.sign(payload),
     };
   }
+
+  async validateToken(token: string) {
+    try {
+      this.jwtService.verify(token);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  async refreshToken(oldToken: string) {
+    try {
+      const decoded = this.jwtService.verify(oldToken, {
+        ignoreExpiration: true,
+      });
+      const payload = { username: decoded.username, sub: decoded.sub };
+      return {
+        access_token: this.jwtService.sign(payload),
+      };
+    } catch {
+      throw new Error('Invalid token');
+    }
+  }
 }
