@@ -43,8 +43,6 @@ export class AuthController {
       sameSite: 'lax',
     });
 
-    return res.redirect(
-      `${process.env.CLIENT_URL || 'http://localhost:3000'}/auth/callback`,
-    );
+    return res.redirect(`${process.env.CLIENT_URL}/auth/callback`);
   }
 }
