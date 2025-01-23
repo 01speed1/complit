@@ -49,7 +49,7 @@ const Me = () => {
       </div>
 
       {projects.length === 0 && (
-        <div className="">
+        <>
           <div className="text-l mb-2 font-semibold text-center">
             No projects found
           </div>
@@ -57,7 +57,7 @@ const Me = () => {
           <div className="text-sm text-center">
             Click the button above to create a new project
           </div>
-        </div>
+        </>
       )}
 
       {workingProject && (

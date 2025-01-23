@@ -12,7 +12,10 @@ export interface ProjectStatusProps {
 
 export default function ProjectCard({ project }: ProjectStatusProps) {
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 mb-3 hover:bg-gray-100 transition-colors duration-200">
+    <div
+      key={project.id}
+      className="bg-white shadow-md rounded-lg p-6 mb-3 hover:bg-gray-100 transition-colors duration-200"
+    >
       <Link to={`/projects/${project.id}`}>
         <div className="text-2xl">{project.title}</div>
         <StatusBadge className="pt-2 mt-2 text-sm" status={project.status}>
