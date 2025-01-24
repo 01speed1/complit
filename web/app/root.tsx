@@ -36,8 +36,6 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   const isAuthenticated = await apiClient.checkIfAuthenticated();
 
-  console.log({ aaa: process.env });
-
   return {
     isAuthenticated,
     ENV: {
