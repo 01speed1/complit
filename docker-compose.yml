@@ -16,6 +16,7 @@ services:
       dockerfile: Dockerfile
     environment:
       REACT_APP_API_URL: http://complit_api:3001
+      API_URL: http://localhost:3001
     ports:
       - '3000:3000'
     networks:

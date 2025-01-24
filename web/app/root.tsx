@@ -31,7 +31,24 @@ export const links: LinksFunction = () => [
   },
 ];
 
+export const loader: LoaderFunction = async ({ request }) => {
+  const apiClient = new ApiClient(request);
+
+  const isAuthenticated = await apiClient.checkIfAuthenticated();
+
+  console.log({ aaa: process.env });
+
+  return {
+    isAuthenticated,
+    ENV: {
+      authUrl: process.env.API_URL,
+    },
+  };
+};
+
 export function Layout({ children }: { children: React.ReactNode }) {
+  const data = useLoaderData<typeof loader>();
+
   return (
     <html lang="en">
       <head>
@@ -43,22 +60,24 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body className="bg-gray-100">
         {children}
         <ScrollRestoration />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.ENV = ${JSON.stringify(data.ENV)}`,
+          }}
+        />
         <Scripts />
       </body>
     </html>
   );
 }
 
-export const loader: LoaderFunction = async ({ request }) => {
-  const apiClient = new ApiClient(request);
-
-  const isAuthenticated = await apiClient.checkIfAuthenticated();
-
-  return { isAuthenticated };
-};
-
 export default function App() {
-  const { isAuthenticated } = useLoaderData<{ isAuthenticated: boolean }>();
+  const { isAuthenticated } = useLoaderData<{
+    isAuthenticated: boolean;
+    ENV: {
+      authUrl: string;
+    };
+  }>();
 
   return (
     <>
@@ -70,7 +89,7 @@ export default function App() {
   );
 }
 
-export function ErrorBoundary() {
+/* export function ErrorBoundary() {
   const error = useRouteError();
   const isAuthenticated = false;
   return (
@@ -94,3 +113,4 @@ export function ErrorBoundary() {
     </html>
   );
 }
+ */
