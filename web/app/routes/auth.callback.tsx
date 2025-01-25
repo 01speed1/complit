@@ -4,13 +4,14 @@ import { useLoaderData } from "@remix-run/react";
 
 export const loader: LoaderFunction = async ({ request }) => {
   let rawCookie;
+  let token;
   try {
     const cookieHeader = request.headers.get("Cookie");
 
     rawCookie = cookieHeader
       ?.split(";")
       .find((c) => c.trim().startsWith("auth_token="));
-    const token = rawCookie?.split("=")[1];
+    token = rawCookie?.split("=")[1];
 
     const session = await getSession(cookieHeader);
     session.set("token", token);
@@ -26,7 +27,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     });
   } catch (error) {
     console.error(error);
-    return { error: error.toString(), rawCookie };
+    return { token, rawCookie, error: error.toString() };
   }
 };
 
