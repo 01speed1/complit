@@ -1,10 +1,10 @@
 import { getSession } from "./auth/authCookie";
 
-const { REACT_APP_API_URL } = process.env;
+const { API_URL } = process.env;
 
 class ApiClient {
   private token: string | null = null;
-  private URL = REACT_APP_API_URL;
+  private URL = API_URL;
 
   constructor(private request: Request) {}
 
