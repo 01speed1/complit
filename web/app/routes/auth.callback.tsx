@@ -27,7 +27,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     });
   } catch (error) {
     console.error(error);
-    return { error: (error as Error).message };
+    return { token, error: (error as Error).message, rawCookie };
   }
 };
 
