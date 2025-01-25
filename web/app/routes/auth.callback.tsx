@@ -27,16 +27,14 @@ export const loader: LoaderFunction = async ({ request }) => {
     });
   } catch (error) {
     console.error(error);
-    return { token, rawCookie, error: error.toString() };
+    return { error: (error as Error).message };
   }
 };
 
 export default function AuthCallback() {
   const data = useLoaderData<typeof loader>();
 
-  return (
-    <>
-      <pre>{JSON.stringify(data)}</pre>
-    </>
-  );
+  console.log(data);
+
+  return <>Something fails in login</>;
 }
