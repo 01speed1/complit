@@ -3,10 +3,11 @@ import { getSession, commitSession } from "../services/auth/authCookie";
 import { useLoaderData } from "@remix-run/react";
 
 export const loader: LoaderFunction = async ({ request }) => {
+  let rawCookie;
   try {
     const cookieHeader = request.headers.get("Cookie");
 
-    const rawCookie = cookieHeader
+    rawCookie = cookieHeader
       ?.split(";")
       .find((c) => c.trim().startsWith("auth_token="));
     const token = rawCookie?.split("=")[1];
