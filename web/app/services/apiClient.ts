@@ -48,11 +48,11 @@ class ApiClient {
       },
     });
 
-    if (!response.ok) {
+    const { access_token } = await response.json();
+
+    if (!access_token) {
       throw new Error("Unauthorized");
     }
-
-    const { access_token } = await response.json();
 
     return access_token;
   }
