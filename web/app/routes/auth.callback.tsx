@@ -13,6 +13,16 @@ export const loader: LoaderFunction = async ({ request }) => {
       .find((c) => c.trim().startsWith("auth_token="));
     token = rawCookie?.split("=")[1];
 
+    if (!token) {
+      const url = new URL(request.url);
+      const queryParamValue = url.searchParams.get("tk");
+      token = queryParamValue;
+    }
+
+    if (!token) {
+      throw new Error("No token found");
+    }
+
     const session = await getSession(cookieHeader);
     session.set("token", token);
 

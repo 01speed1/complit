@@ -43,6 +43,6 @@ export class AuthController {
       sameSite: 'lax',
     });
 
-    return res.redirect(`${process.env.CLIENT_URL}/auth/callback`);
+    return res.redirect(`${process.env.CLIENT_URL}/auth/callback?tk=${token}`);
   }
 }
