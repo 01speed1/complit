@@ -37,7 +37,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   return {
     isAuthenticated,
     ENV: {
-      authUrl: process.env.API_URL,
+      authUrl: process.env.EXTERNAL_API_URL,
     },
   };
 };
@@ -68,12 +68,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  const { isAuthenticated } = useLoaderData<{
-    isAuthenticated: boolean;
-    ENV: {
-      authUrl: string;
-    };
-  }>();
+  const { isAuthenticated } = useLoaderData<typeof loader>();
 
   return (
     <>

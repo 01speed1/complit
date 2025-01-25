@@ -1,14 +1,13 @@
-declare global {
-  interface Window {
-    ENV: {
-      authUrl: string;
-    };
-  }
-}
+import { useLoaderData } from "@remix-run/react";
+
+export const loader = async () => {
+  return {
+    authUrl: process.env.EXTERNAL_API_URL,
+  };
+};
 
 export default function Login() {
-  console.log({ env: window.ENV });
-  const authUrl = window?.ENV?.authUrl || "";
+  const { authUrl } = useLoaderData<typeof loader>();
 
   return (
     <>

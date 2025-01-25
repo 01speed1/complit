@@ -16,7 +16,8 @@ export const loader: LoaderFunction = async ({ request }) => {
   try {
     await projectService.init();
     await userService.init();
-  } catch {
+  } catch (error) {
+    console.error(error);
     return redirect("/login");
   }
 

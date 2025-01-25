@@ -1,10 +1,10 @@
 import { getSession } from "./auth/authCookie";
 
-const { API_URL } = process.env;
+const { INTERNAL_API_URL } = process.env;
 
 class ApiClient {
   private token: string | null = null;
-  private URL = API_URL;
+  private URL = INTERNAL_API_URL;
 
   constructor(private request: Request) {}
 

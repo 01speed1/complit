@@ -1,4 +1,4 @@
-const URL = process.env.API_URL;
+const URL = process.env.INTERNAL_API_URL;
 
 export async function validateSessionToken(token: string) {
   try {

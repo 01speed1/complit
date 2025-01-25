@@ -8,6 +8,6 @@ export const { getSession, commitSession, destroySession } =
       secure: true,
       path: "/",
       sameSite: "lax",
-      secrets: [process.env.API_URL || "default_secret"],
+      secrets: [process.env.EXTERNAL_API_URL || "default_secret"],
     },
   });
