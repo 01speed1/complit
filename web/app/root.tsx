@@ -86,29 +86,3 @@ export default function App() {
     </>
   );
 }
-
-/* export function ErrorBoundary() {
-  const error = useRouteError();
-  const isAuthenticated = false;
-  return (
-    <html lang="en">
-      <head>
-        <title>Oops!</title>
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        <MainNavBar isAuthenticated={isAuthenticated} />
-        <h1>
-          {isRouteErrorResponse(error)
-            ? `${error.status} ${error.statusText}`
-            : error instanceof Error
-            ? error.message
-            : "Unknown Error"}
-        </h1>
-        <Scripts />
-      </body>
-    </html>
-  );
-}
- */
