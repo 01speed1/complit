@@ -5,6 +5,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
+        caveat: ["Caveat", "serif"],
         sans: [
           "Inter",
           "ui-sans-serif",

@@ -5,6 +5,7 @@ import {
   UseGuards,
   Request,
   Param,
+  Delete,
 } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import { CreateProjectDto } from './dto/create-project.dto';
@@ -42,5 +43,12 @@ export class ProjectsController {
     createProjectDto.user_id = request.user.userId;
     createProjectDto.start_date = new Date(createProjectDto.start_date);
     return this.projectsService.create(createProjectDto);
+  }
+
+  @Delete(':id')
+  @UseGuards(AuthGuard('jwt'))
+  async delete(@Param('id') id: string, @Request() request) {
+    const userId = request.user.userId;
+    return this.projectsService.deleteProjectAndTasks(id, userId);
   }
 }

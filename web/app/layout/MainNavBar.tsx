@@ -78,7 +78,7 @@ export function MainNavBar({ isAuthenticated }: MainNavBarProps) {
 }
 
 export function CollapsibleSideNavBar({ isAuthenticated }: MainNavBarProps) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const [isAuthenticatedState, setIsAuthenticated] = useState(isAuthenticated);
 
   const logoutFetcher = useFetcher<{ success: boolean }>();

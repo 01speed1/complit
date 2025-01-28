@@ -28,7 +28,7 @@ model Project {
   start_date            DateTime
   end_date              DateTime?
   is_working            Boolean      @default(false)
-  is_working_start_date DateTime?
+  is_working_start_date DateTime?    @default(now())
   progress              Int          @default(0)
   status                TaskStatus   @default(Pending) // TODO: I'm not using this field, remove when you sure you don't need it
   user_id               Int

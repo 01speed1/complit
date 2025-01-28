@@ -6,11 +6,26 @@ import {
   ScrollRestoration,
   useLoaderData,
 } from "@remix-run/react";
-import type { LinksFunction, LoaderFunction } from "@remix-run/node";
+import type {
+  LinksFunction,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/node";
 
 import "./tailwind.css";
 import ApiClient from "./services/apiClient";
 import MainNavBar from "~/layout/MainNavBar";
+
+export const meta: MetaFunction = () => {
+  return [
+    {
+      title: "Complit",
+      description: "Complit is a simple app to manage your tasks",
+    },
+    { charSet: "utf-8" },
+    { name: "viewport", content: "width=device-width, initial-scale=1" },
+  ];
+};
 
 export const links: LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -27,6 +42,10 @@ export const links: LinksFunction = () => [
     rel: "stylesheet",
     href: "https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css",
   },
+  {
+    rel: "stylesheet",
+    href: "https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap",
+  },
 ];
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -36,31 +55,19 @@ export const loader: LoaderFunction = async ({ request }) => {
 
   return {
     isAuthenticated,
-    ENV: {
-      authUrl: process.env.EXTERNAL_API_URL,
-    },
   };
 };
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  const data = useLoaderData<typeof loader>();
-
   return (
     <html lang="en">
       <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
       </head>
       <body className="bg-gray-100">
         {children}
         <ScrollRestoration />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `window.ENV = ${JSON.stringify(data.ENV)}`,
-          }}
-        />
         <Scripts />
       </body>
     </html>

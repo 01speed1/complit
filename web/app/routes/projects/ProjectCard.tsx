@@ -17,7 +17,9 @@ export default function ProjectCard({ project }: ProjectStatusProps) {
       className="bg-white shadow-md rounded-lg p-6 mb-3 hover:bg-gray-100 transition-colors duration-200"
     >
       <Link to={`/projects/${project.id}`}>
-        <div className="text-2xl">{project.title}</div>
+        <div className="text-2xl capitalize" title={project.id + ""}>
+          {project.title}
+        </div>
         <StatusBadge className="pt-2 mt-2 text-sm" status={project.status}>
           {project.status}
         </StatusBadge>
@@ -27,19 +29,29 @@ export default function ProjectCard({ project }: ProjectStatusProps) {
               <li className="flex items-center rounded-lg bg-gray-50 p-2">
                 <CheckIcon className="text-gray-400" />
                 <span className="text-sm ml-2">
-                  {project.lastCompletedTaskDays} days since task completed
+                  <span className="font-bold">
+                    {project.lastCompletedTaskDays}{" "}
+                  </span>
+                  day
+                  {project.lastCompletedTaskDays !== 1 ? "s" : ""} since last
+                  task completed
                 </span>
               </li>
               <li className="flex items-center rounded-lg bg-gray-50 p-2">
                 <BookmarkStartIcon className="text-gray-400" />
                 <span className="text-sm ml-2">
-                  {project.lastTaskAddedDays} days since last task added
+                  <span className="font-bold">
+                    {project.lastTaskAddedDays}{" "}
+                  </span>
+                  days since last task added
                 </span>
               </li>
               <li className="flex items-center rounded-lg bg-gray-50 p-2">
                 <CalendarIcon className="text-gray-400" />
                 <span className="text-sm ml-2">
-                  Created {project.createdAtDays} days ago
+                  Created
+                  <span className="font-bold"> {project.createdAtDays} </span>
+                  days ago
                 </span>
               </li>
             </ul>
@@ -58,7 +70,7 @@ export default function ProjectCard({ project }: ProjectStatusProps) {
         <div className="mt-4 projectCard__InProgressStatus text-orange-700 text-center items-center rounded-lg bg-orange-300 p-2">
           <FlagIcon className="text-xl" />
           <span className="text-sm ml-2">
-            You are working {project.workingDays || "0"} days sinse you check
+            You have worked {project.workingDays || "0"} days since you check
           </span>
         </div>
       )}

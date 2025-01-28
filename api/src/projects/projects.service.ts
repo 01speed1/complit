@@ -116,4 +116,19 @@ export class ProjectsService {
       },
     });
   }
+
+  async deleteProjectAndTasks(id: string, userId: number): Promise<any> {
+    await prisma.task.deleteMany({
+      where: {
+        project_id: parseInt(id, 10),
+      },
+    });
+
+    return prisma.project.delete({
+      where: {
+        id: parseInt(id, 10),
+        user_id: userId,
+      },
+    });
+  }
 }

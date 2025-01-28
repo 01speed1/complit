@@ -1,4 +1,4 @@
-import { Link, Form } from "@remix-run/react";
+import { Link, Form, useNavigation } from "@remix-run/react";
 import { redirect } from "@remix-run/node";
 
 import ProjectService, { NewProject } from "../services/projects";
@@ -31,6 +31,7 @@ export const action = async ({ request }: { request: Request }) => {
 };
 
 export default function ProjectNew() {
+  const navigation = useNavigation();
   return (
     <div className="border-gray-200 bg-white px-4 py-3 sm:px-6 mb-4 rounded-md shadow-md">
       <h1 className="text-2xl m-4 text-center">Create a new Project</h1>
@@ -64,9 +65,10 @@ export default function ProjectNew() {
 
           <button
             type="submit"
+            disabled={navigation.state == "loading"}
             className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition duration-300"
           >
-            Create Project
+            {navigation.state === "loading" ? "Creating..." : "Create Project"}
           </button>
         </div>
       </Form>
