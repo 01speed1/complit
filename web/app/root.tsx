@@ -46,6 +46,18 @@ export const links: LinksFunction = () => [
     rel: "stylesheet",
     href: "https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap",
   },
+  {
+    rel: "stylesheet",
+    href: "https://fonts.googleapis.com/css2?family=Righteous&display=swap",
+  },
+  {
+    rel: "stylesheet",
+    href: "https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap",
+  },
+  {
+    rel: "stylesheet",
+    href: "https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap",
+  }
 ];
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -80,7 +92,7 @@ export default function App() {
   return (
     <>
       <MainNavBar isAuthenticated={isAuthenticated} />
-      <div className="mx-auto max-w-2xl p-4">
+      <div className="mx-auto pl-12">
         <Outlet />
       </div>
     </>

@@ -2,6 +2,7 @@ import { Link, Form, useNavigation } from "@remix-run/react";
 import { redirect } from "@remix-run/node";
 
 import ProjectService, { NewProject } from "../services/projects";
+import CardContainer from "~/components/CardContainer";
 
 export const loader = async () => {
   return { project: {} };
@@ -32,46 +33,61 @@ export const action = async ({ request }: { request: Request }) => {
 
 export default function ProjectNew() {
   const navigation = useNavigation();
-  return (
-    <div className="border-gray-200 bg-white px-4 py-3 sm:px-6 mb-4 rounded-md shadow-md">
-      <h1 className="text-2xl m-4 text-center">Create a new Project</h1>
-      <Form className="flex flex-col" method="post">
-        <label htmlFor="title" className="text-md">
-          Title
-        </label>
-        <input
-          type="text"
-          id="title"
-          name="title"
-          className="border border-gray-300 rounded-md p-2 mb-4"
-          required
-        />
-        <label htmlFor="description" className="text-md">
-          Description
-        </label>
-        <textarea
-          id="description"
-          name="description"
-          className="border border-gray-300 rounded-md p-2 mb-4"
-          required
-        />
-        <div className=" flex flex-col m-4">
-          <Link
-            to="/me"
-            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition duration-300 mb-4 text-center"
-          >
-            <button type="button">Back to Me</button>
-          </Link>
 
-          <button
-            type="submit"
-            disabled={navigation.state == "loading"}
-            className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition duration-300"
-          >
-            {navigation.state === "loading" ? "Creating..." : "Create Project"}
-          </button>
+  // <div className="flex justify-center items-center min-h-screen">
+  // <div className="mx-auto w-[40rem]">
+
+  return (
+    <div className="flex justify-center items-center min-h-screen">
+      <CardContainer>
+        <div className="mx-auto w-[40rem]">
+          <h1 className="font-lexend text-2xl m-4 text-center">
+            Create a new Project
+          </h1>
+          <Form className="flex flex-col" method="post">
+            <label htmlFor="title" className="text-md font-semibold mb-2">
+              Title
+            </label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              className="border border-gray-300 rounded-md p-2 mb-4 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              placeholder="Enter project title"
+              required
+            />
+            <label htmlFor="description" className="text-md font-semibold mb-2">
+              Description
+            </label>
+            <textarea
+              id="description"
+              name="description"
+              className="border border-gray-300 rounded-md p-2 mb-4 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              placeholder="Enter project description"
+              rows={5}
+              required
+            />
+            <div className=" flex flex-col m-4">
+              <Link
+                to="/me"
+                className="font-lexend bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition duration-300 mb-4 text-center"
+              >
+                <button type="button">Back to Me</button>
+              </Link>
+
+              <button
+                type="submit"
+                disabled={navigation.state == "loading"}
+                className="font-lexend bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition duration-300"
+              >
+                {navigation.state === "loading"
+                  ? "Creating..."
+                  : "Create Project"}
+              </button>
+            </div>
+          </Form>
         </div>
-      </Form>
+      </CardContainer>
     </div>
   );
 }

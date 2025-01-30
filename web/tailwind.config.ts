@@ -6,6 +6,9 @@ export default {
     extend: {
       fontFamily: {
         caveat: ["Caveat", "serif"],
+        righteous: ["Righteous", "cursive"],
+        lexend: ["Lexend", "sans-serif"],
+        montserrat: ["Montserrat", "sans-serif"],
         sans: [
           "Inter",
           "ui-sans-serif",

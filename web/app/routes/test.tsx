@@ -2,6 +2,7 @@ import { StatusBadge } from "~/components/StatusBadge";
 import BookmarkStartIcon from "~/icons/BookMarkStart";
 import CheckIcon from "~/icons/Check";
 import CalendarIcon from "~/icons/Calendar";
+import CardContainer from "~/components/CardContainer";
 
 interface ProjectStatusProps {
   project?: {
@@ -87,12 +88,13 @@ const ProjectStatus = ({ project }: ProjectStatusProps) => {
 
 export default function Test() {
   return (
-    <div className="space-y-4">
-      <ProjectStatus></ProjectStatus>
-
-      {/* <StatusBadge status={taskStatus.Pending}>Pending Task</StatusBadge>
-      <StatusBadge status={taskStatus.Working}>Working Task</StatusBadge>
-      <StatusBadge status={taskStatus.Completed}>Completed Task</StatusBadge> */}
-    </div>
+    <CardContainer>
+      <p>
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas temporibus
+        rerum, eligendi maiores magnam dolore nihil impedit laudantium delectus
+        amet praesentium nisi iure placeat, consequuntur necessitatibus illo
+        harum eveniet. Laborum.
+      </p>
+    </CardContainer>
   );
 }
