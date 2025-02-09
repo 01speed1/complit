@@ -1,0 +1,33 @@
+{
+  "name": "Node.js Complit AI API Container",
+  "workspaceFolder": "/code",
+  "mounts": [
+    {
+      "source": "${localWorkspaceFolder}",
+      "target": "/code",
+      "type": "bind"
+    }
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "Gruntfuggly.todo-tree",
+        "humao.rest-client",
+        "streetsidesoftware.code-spell-checker",
+        "oderwat.indent-rainbow",
+        "christian-kohler.path-intellisense",
+        "shardulm94.trailing-spaces"
+      ],
+      "settings": {}
+    }
+  },
+  "postCreateCommand": "if [ -f package-lock.json ]; then pnpm install; fi",
+  "dockerComposeFile": "../../docker-compose.yml",
+  "service": "complit_ai_api",
+  "runServices": [
+    "ollama"
+  ],
+  "overrideCommand": true
+}
