@@ -2,23 +2,41 @@ import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 
-// Import the generated route tree
 import { routeTree } from './routeTree.gen'
 
 import './styles.css'
 import reportWebVitals from './reportWebVitals.ts'
 
-// Create a new router instance
+const API_BASE = (import.meta.env.VITE_API_URL as string) || ""
+
+export type User = { id: string; email?: string; name?: string } | null
+
+export interface RouterContext {
+  checkAuthStatus: () => Promise<User>
+}
+
+async function checkAuthStatus(): Promise<User> {
+  try {
+    const res = await fetch(`${API_BASE}/auth/me`, { credentials: "include" })
+    if (res.ok) {
+      const payload = await res.json()
+      return payload.user ?? null
+    }
+    return null
+  } catch {
+    return null
+  }
+}
+
 const router = createRouter({
   routeTree,
-  context: {},
+  context: { checkAuthStatus } as RouterContext,
   defaultPreload: 'intent',
   scrollRestoration: true,
   defaultStructuralSharing: true,
   defaultPreloadStaleTime: 0,
 })
 
-// Register the router instance for type safety
 declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router

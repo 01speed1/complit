@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, createContext, useContext, type ReactNode } from "react";
+import { useState, useEffect, useMemo, createContext, useContext, type ReactNode } from "react";
 
 const API_BASE = (import.meta.env.VITE_API_URL as string) || "";
 

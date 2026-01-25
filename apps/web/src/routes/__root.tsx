@@ -29,12 +29,12 @@ const Root = () => {
 export const Route = createRootRoute({
   component: Root,
   context: () => {
-    // This will be populated by the router context if needed, 
+    // This will be populated by the router context if needed,
     // but for now we are wrapping the app in the provider.
     // To access auth in beforeLoad, we might need to pass it via context,
-    // but since context is created at the root, we might need a different approach 
+    // but since context is created at the root, we might need a different approach
     // if we want to use the hook in beforeLoad of child routes.
     // However, for now, let's just wrap the app.
-    return {}
-  }
+    return {};
+  },
 });
