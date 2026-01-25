@@ -4,3 +4,5 @@ dist
 
 api_old
 web_old
+
+*.env
