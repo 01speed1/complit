@@ -6,6 +6,8 @@
     "kohler",
     "oderwat",
     "postgres",
-    "shardulm"
+    "postgresql",
+    "shardulm",
+    "tanstack"
   ]
 }

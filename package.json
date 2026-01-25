@@ -1,9 +1,16 @@
 {
   "name": "@complit/web",
   "version": "2.0.0",
+  "engines": {
+    "node": ">=25.4.0"
+  },
+  "packageManager": "pnpm@10.28.1",
   "scripts": {
-    "web:dev": "pnpm --filter apps/web dev",
-    "web:build": "pnpm --filter apps/web build"
+    "web:dev": "pnpm --filter @complit/web dev",
+    "web:build": "pnpm --filter @complit/web build",
+    "api:dev": "pnpm --filter @complit/api dev",
+    "api:build": "pnpm --filter @complit/api build",
+    "clean": "sudo find . -name 'node_modules' -type d -prune -exec rm -rf '{}' + -o -name 'pnpm-lock.yaml' -type f -exec rm -f '{}' +"
   },
   "keywords": [],
   "author": "",

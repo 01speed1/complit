@@ -1,2 +1,6 @@
 node_modules
 .pnpm-store
+dist
+
+api_old
+web_old

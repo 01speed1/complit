@@ -32,6 +32,12 @@ API endpoints (default host `http://localhost:3000`):
 - `PUT /evidence/:id` — update evidence
 - `DELETE /evidence/:id` — delete evidence
 
+Auth (prototype endpoints):
+- `GET /auth/better` — start auth redirect (prototype)
+- `GET /auth/callback` — auth provider callback (prototype)
+- `GET /auth/me` — return current user from session cookie
+- `POST /auth/logout` — clear session cookie and logout
+
 Notes:
 - This is in-memory storage; restarting the server clears data.
 - For production, replace in-memory stores with a database and add input validation and authentication.

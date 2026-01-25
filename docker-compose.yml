@@ -1,27 +1,4 @@
 services:
-  complit_api:
-    build:
-      context: ./api
-      dockerfile: Dockerfile
-    environment:
-      PORT: 3001
-      DATABASE_URL: postgres://postgres:postgres@postgres:5432/complit_db
-    ports:
-      - '3001:3001'
-    networks:
-      - app-network
-  complit_web:
-    build:
-      context: ./web
-      dockerfile: Dockerfile
-    environment:
-      REACT_APP_API_URL: http://complit_api:3001
-      API_URL: http://localhost:3001
-    ports:
-      - '3000:3000'
-    networks:
-      - app-network
-
   postgres:
     image: postgres:latest
     environment:
@@ -32,16 +9,6 @@ services:
       - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    networks:
-      - app-network
-
-  pgadmin:
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-    ports:
-      - '5050:80'
     networks:
       - app-network
 
