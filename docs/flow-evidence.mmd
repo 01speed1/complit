@@ -1,0 +1,14 @@
+---
+title: Evidence Tracking Flow
+---
+flowchart TD
+    E1[Add Evidence] --> E2[Link to goal]
+    E2 --> E3{Link to milestone?}
+    E3 -->|Optional| E4[Set milestone_id]
+    E3 -->|No| E5[milestone_id = null]
+    E4 --> E6[Save with createdAt]
+    E5 --> E6
+
+    E7[Edit Evidence] --> E8[Update content]
+    E8 --> E9[Set updatedAt]
+    E9 --> E10[Preserve history]

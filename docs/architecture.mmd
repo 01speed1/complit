@@ -1,0 +1,31 @@
+---
+title: Complit - System Architecture
+---
+
+flowchart TB
+    subgraph Client["Client (Browser)"]
+        Web["Web App<br/>React + TanStack Router<br/>:3001"]
+    end
+
+    subgraph Server["Server"]
+        API["API<br/>Fastify + Node 25<br/>:3000"]
+        Sessions["In-Memory Sessions<br/>Map&lt;sessionId, SessionData&gt;"]
+    end
+
+    subgraph External["External Services"]
+        Google["Google OAuth 2.0"]
+        DB[(Database<br/>PostgreSQL)]
+    end
+
+    Web <-->|"HTTP + Cookies<br/>credentials: include"| API
+    API <--> Sessions
+    API <-->|"OAuth Flow"| Google
+    API <-->|"CRUD"| DB
+
+    classDef client fill:#e1f5fe
+    classDef server fill:#fff3e0
+    classDef external fill:#f3e5f5
+
+    class Web client
+    class API,Sessions server
+    class Google,DB external

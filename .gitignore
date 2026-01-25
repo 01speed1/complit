@@ -6,3 +6,6 @@ api_old
 web_old
 
 *.env
+
+# Claude Code hooks state
+.claude/pending-doc-updates.json

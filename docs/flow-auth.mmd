@@ -1,0 +1,16 @@
+---
+title: OAuth Authentication Flow
+---
+flowchart TD
+    A[User visits /login] --> B[Click 'Sign in with Google']
+    B --> C[Redirect to /auth/better]
+    C --> D[Generate state token]
+    D --> E[Redirect to Google OAuth]
+    E --> F{User authorizes?}
+    F -->|Yes| G[Google redirects to /auth/callback]
+    F -->|No| H[Return to login]
+    G --> I[Exchange code for tokens]
+    I --> J[Fetch user info from Google]
+    J --> K[Create session in memory]
+    K --> L[Set session_id cookie]
+    L --> M[Redirect to frontend]

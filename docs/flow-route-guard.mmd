@@ -1,0 +1,10 @@
+---
+title: Route Protection Flow
+---
+flowchart TD
+    R1[User navigates to /_auth/*] --> R2[beforeLoad executes]
+    R2 --> R3[Call /auth/me with credentials]
+    R3 --> R4{Cookie valid?}
+    R4 -->|Yes| R5[Return user to context]
+    R4 -->|No| R6[Redirect to /login]
+    R5 --> R7[Render protected route]

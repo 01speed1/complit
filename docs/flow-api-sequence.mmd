@@ -1,0 +1,18 @@
+---
+title: API Request Sequence
+---
+sequenceDiagram
+    participant Browser
+    participant Web as Web :3001
+    participant API as API :3000
+    participant Google
+
+    Browser->>Web: Navigate to /dashboard
+    Web->>API: GET /auth/me (credentials)
+    API-->>Web: { user: {...} }
+    Web-->>Browser: Render dashboard
+
+    Browser->>Web: Click logout
+    Web->>API: POST /auth/logout
+    API-->>Web: { ok: true }
+    Web-->>Browser: Redirect to /login

@@ -1,0 +1,19 @@
+---
+title: Goal Management Flow
+---
+flowchart TD
+    subgraph Create
+        G1[Create Goal] --> G2[title required]
+        G2 --> G3[Set status: active]
+        G3 --> G4[Save to DB]
+    end
+
+    subgraph Update
+        G5[Update Goal] --> G6[Validate fields]
+        G6 --> G7[Persist order changes]
+    end
+
+    subgraph Complete
+        G8[Complete Goal] --> G9[User marks done]
+        G9 --> G10[Set completedAt]
+    end

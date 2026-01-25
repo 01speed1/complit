@@ -1,0 +1,442 @@
+openapi: 3.1.0
+info:
+  title: Complit API
+  description: Personal goal management with milestones and evidence tracking
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+    description: Development server
+
+tags:
+  - name: auth
+    description: OAuth authentication
+  - name: goals
+    description: Goal management
+  - name: milestones
+    description: Milestone management
+  - name: evidence
+    description: Evidence tracking
+
+paths:
+  /auth/better:
+    get:
+      tags:
+        - auth
+      summary: Start OAuth flow
+      description: Redirects to Google OAuth consent screen
+      responses:
+        '302':
+          description: Redirect to Google OAuth
+        '500':
+          description: GOOGLE_CLIENT_ID not configured
+
+  /auth/callback:
+    get:
+      tags:
+        - auth
+      summary: OAuth callback
+      description: Handles Google OAuth callback, exchanges code for tokens
+      parameters:
+        - name: code
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: state
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '302':
+          description: Redirect to frontend with session cookie
+        '400':
+          description: Missing code or invalid state
+        '502':
+          description: Token exchange or userinfo fetch failed
+
+  /auth/me:
+    get:
+      tags:
+        - auth
+      summary: Get current user
+      description: Returns user info based on session cookie
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: User info or null
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/components/schemas/User'
+
+  /auth/logout:
+    post:
+      tags:
+        - auth
+      summary: Logout
+      description: Clears session and cookie
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+
+  /goals:
+    get:
+      tags:
+        - goals
+      summary: List goals
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: List of goals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Goal'
+    post:
+      tags:
+        - goals
+      summary: Create goal
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoalCreate'
+      responses:
+        '201':
+          description: Goal created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Goal'
+
+  /goals/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - goals
+      summary: Get goal by ID
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Goal found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Goal'
+        '404':
+          description: Goal not found
+    put:
+      tags:
+        - goals
+      summary: Update goal
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoalUpdate'
+      responses:
+        '200':
+          description: Goal updated
+    delete:
+      tags:
+        - goals
+      summary: Delete goal
+      security:
+        - cookieAuth: []
+      responses:
+        '204':
+          description: Goal deleted
+
+  /milestones:
+    get:
+      tags:
+        - milestones
+      summary: List milestones
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: goalId
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of milestones
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Milestone'
+    post:
+      tags:
+        - milestones
+      summary: Create milestone
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MilestoneCreate'
+      responses:
+        '201':
+          description: Milestone created
+
+  /evidence:
+    get:
+      tags:
+        - evidence
+      summary: List evidence
+      security:
+        - cookieAuth: []
+      parameters:
+        - name: goalId
+          in: query
+          schema:
+            type: string
+        - name: milestoneId
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of evidence
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Evidence'
+    post:
+      tags:
+        - evidence
+      summary: Add evidence
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EvidenceCreate'
+      responses:
+        '201':
+          description: Evidence created
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: session_id
+
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+
+    Goal:
+      type: object
+      required:
+        - id
+        - title
+        - status
+        - order
+        - createdAt
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        targetDescription:
+          type: string
+        durationInMonths:
+          type: integer
+        priority:
+          type: string
+          enum:
+            - low
+            - medium
+            - high
+        status:
+          type: string
+          enum:
+            - active
+            - completed
+            - paused
+        order:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+
+    GoalCreate:
+      type: object
+      required:
+        - title
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        targetDescription:
+          type: string
+        durationInMonths:
+          type: integer
+        priority:
+          type: string
+          enum:
+            - low
+            - medium
+            - high
+
+    GoalUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+        description:
+          type: string
+        targetDescription:
+          type: string
+        durationInMonths:
+          type: integer
+        priority:
+          type: string
+          enum:
+            - low
+            - medium
+            - high
+        status:
+          type: string
+          enum:
+            - active
+            - completed
+            - paused
+        order:
+          type: integer
+
+    Milestone:
+      type: object
+      required:
+        - id
+        - goalId
+        - title
+        - status
+        - order
+        - createdAt
+      properties:
+        id:
+          type: string
+        goalId:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+            - pending
+            - in_progress
+            - completed
+        order:
+          type: integer
+        createdAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: string
+          format: date-time
+
+    MilestoneCreate:
+      type: object
+      required:
+        - goalId
+        - title
+      properties:
+        goalId:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+
+    Evidence:
+      type: object
+      required:
+        - id
+        - goalId
+        - content
+        - createdAt
+      properties:
+        id:
+          type: string
+        goalId:
+          type: string
+        milestoneId:
+          type: string
+        content:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    EvidenceCreate:
+      type: object
+      required:
+        - goalId
+        - content
+      properties:
+        goalId:
+          type: string
+        milestoneId:
+          type: string
+        content:
+          type: string
