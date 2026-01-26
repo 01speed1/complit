@@ -8,7 +8,7 @@ flowchart TB
     end
 
     subgraph Server["Server"]
-        API["API<br/>Fastify + Node 25<br/>:3000"]
+        API["API<br/>Fastify + Node 25<br/>Drizzle ORM<br/>:3000"]
         Sessions["In-Memory Sessions<br/>Map&lt;sessionId, SessionData&gt;"]
     end
 

@@ -27,6 +27,14 @@ const DOC_MAPPINGS = {
   "drizzle/": {
     docs: ["docs/db.dbml"],
     type: "database"
+  },
+  "apps/api/src/db/schema.ts": {
+    docs: ["docs/db.dbml"],
+    type: "database"
+  },
+  "apps/api/src/middleware/auth.ts": {
+    docs: ["docs/flow-auth.mmd", "docs/flow-route-guard.mmd"],
+    type: "auth"
   }
 }
 
