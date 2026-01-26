@@ -1,0 +1,94 @@
+Project Complit {
+  database_type: 'PostgreSQL'
+  Note: 'Personal goal management with milestones and evidence tracking'
+}
+
+Table users {
+  id varchar [pk, note: 'Google OAuth sub']
+  email varchar [unique, not null]
+  name varchar
+  created_at timestamp [default: `now()`]
+
+  indexes {
+    email
+  }
+}
+
+Table goals {
+  id varchar [pk]
+  user_id varchar [ref: > users.id, not null]
+  title varchar [not null]
+  description text
+  target_description text [note: 'Completion criteria']
+  duration_in_months int
+  priority priority_enum [default: 'medium']
+  status goal_status_enum [default: 'active']
+  "order" int [not null, note: 'Manual sorting']
+  created_at timestamp [default: `now()`]
+  completed_at timestamp
+
+  indexes {
+    user_id
+    (user_id, status)
+  }
+}
+
+Table milestones {
+  id varchar [pk]
+  goal_id varchar [ref: > goals.id, not null]
+  title varchar [not null]
+  description text
+  status milestone_status_enum [default: 'pending']
+  "order" int [not null, note: 'Within goal']
+  created_at timestamp [default: `now()`]
+  completed_at timestamp
+
+  indexes {
+    goal_id
+  }
+}
+
+Table evidence {
+  id varchar [pk]
+  goal_id varchar [ref: > goals.id, not null]
+  milestone_id varchar [ref: > milestones.id, note: 'Optional link']
+  content text [not null, note: 'What was done']
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [note: 'Edit allowed, no delete']
+
+  indexes {
+    goal_id
+    (goal_id, milestone_id)
+  }
+}
+
+Table sessions {
+  id varchar [pk, note: 's_xxxx format']
+  user_id varchar [ref: > users.id, not null]
+  access_token text
+  refresh_token text
+  expires_at timestamp
+  created_at timestamp [default: `now()`]
+
+  indexes {
+    user_id
+  }
+}
+
+Enum priority_enum {
+  low
+  medium
+  high
+}
+
+Enum goal_status_enum {
+  active
+  completed
+  paused
+}
+
+Enum milestone_status_enum {
+  pending
+  in_progress
+  completed
+}

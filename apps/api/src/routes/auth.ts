@@ -1,18 +1,9 @@
 import type { FastifyPluginAsync } from "fastify";
 import crypto from "node:crypto";
-
-type SessionData = {
-  user: { id: string; email?: string; name?: string };
-  createdAt: number;
-  tokens?: {
-    access_token?: string;
-    id_token?: string;
-    refresh_token?: string;
-    expires_in?: number;
-  };
-};
-
-const sessions = new Map<string, SessionData>();
+import { db } from "../db/client.ts";
+import { users, sessions } from "../db/schema.ts";
+import { eq } from "drizzle-orm";
+import { generateSessionId } from "../lib/utils.ts";
 
 const GOOGLE_OAUTH_AUTHORIZE = "https://accounts.google.com/o/oauth2/v2/auth";
 const GOOGLE_OAUTH_TOKEN = "https://oauth2.googleapis.com/token";
@@ -31,17 +22,12 @@ const plugin: FastifyPluginAsync = async (fastify) => {
   fastify.get("/better", async (_, reply) => {
     const clientId = process.env.GOOGLE_CLIENT_ID;
 
-    console.log("Starting better auth flow, clientId:", clientId);
-
     if (!clientId)
       return reply
         .status(500)
         .send({ error: "GOOGLE_CLIENT_ID not configured" });
 
     const state = crypto.randomBytes(16).toString("hex");
-    // store minimal state in memory to validate on callback
-    const stateKey = `st_${state}`;
-    sessions.set(stateKey, { user: null as any, createdAt: Date.now() });
 
     const serverUrl = _getServerUrl();
     const redirectUri = `${serverUrl}/auth/callback`;
@@ -59,17 +45,12 @@ const plugin: FastifyPluginAsync = async (fastify) => {
     return reply.redirect(`${GOOGLE_OAUTH_AUTHORIZE}?${params.toString()}`);
   });
 
-  // OAuth callback: exchange code for tokens and fetch user_info
-  fastify.get("/callback", async (request, reply) => {
-    const { code, state } = request.query as any;
-    if (!code) return reply.status(400).send({ error: "Missing code" });
-    if (!state) return reply.status(400).send({ error: "Missing state" });
-
-    const stateKey = `st_${state}`;
-    if (!sessions.has(stateKey))
-      return reply.status(400).send({ error: "Invalid state" });
-    // remove state marker
-    sessions.delete(stateKey);
+  fastify.get<{ Querystring: { code?: string; state?: string } }>(
+    "/callback",
+    async (request, reply) => {
+      const { code, state } = request.query;
+      if (!code) return reply.status(400).send({ error: "Missing code" });
+      if (!state) return reply.status(400).send({ error: "Missing state" });
 
     const clientId = process.env.GOOGLE_CLIENT_ID;
     const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
@@ -116,23 +97,32 @@ const plugin: FastifyPluginAsync = async (fastify) => {
     }
     const userInfo = await userRes.json();
 
-    const user = {
-      id: userInfo.sub ?? userInfo.id ?? String(Date.now()),
+    const userId = userInfo.sub ?? userInfo.id ?? String(Date.now());
+
+    await db.insert(users).values({
+      id: userId,
       email: userInfo.email,
       name: userInfo.name,
-    };
-    const sessionId = `s_${crypto.randomBytes(12).toString("hex")}`;
-    const sessionData: SessionData = {
-      user,
-      createdAt: Date.now(),
-      tokens: {
-        access_token: accessToken,
-        id_token: tokenPayload.id_token,
-        refresh_token: tokenPayload.refresh_token,
-        expires_in: tokenPayload.expires_in,
+    }).onConflictDoUpdate({
+      target: users.id,
+      set: {
+        email: userInfo.email,
+        name: userInfo.name,
       },
-    };
-    sessions.set(sessionId, sessionData);
+    });
+
+    const sessionId = generateSessionId();
+    const expiresAt = tokenPayload.expires_in
+      ? new Date(Date.now() + tokenPayload.expires_in * 1000)
+      : null;
+
+    await db.insert(sessions).values({
+      id: sessionId,
+      userId,
+      accessToken,
+      refreshToken: tokenPayload.refresh_token,
+      expiresAt,
+    });
 
     // Cookie options: secure if running under HTTPS (NODE_ENV=production)
     const cookieOptions = {
@@ -143,23 +133,37 @@ const plugin: FastifyPluginAsync = async (fastify) => {
     };
     reply.setCookie("session_id", sessionId, cookieOptions);
 
-    // Redirect to frontend
-    return reply.redirect(_getFrontendUrl());
-  });
+      return reply.redirect(_getFrontendUrl());
+    }
+  );
 
-  // Return current user based on session cookie
   fastify.get("/me", async (request, reply) => {
     const sessionId = request.cookies?.session_id as string | undefined;
     if (!sessionId) return reply.status(200).send({ user: null });
-    const session = sessions.get(sessionId);
-    if (!session) return reply.status(200).send({ user: null });
-    return reply.send({ user: session.user });
+
+    const result = await db
+      .select({
+        id: users.id,
+        email: users.email,
+        name: users.name,
+      })
+      .from(sessions)
+      .innerJoin(users, eq(sessions.userId, users.id))
+      .where(eq(sessions.id, sessionId))
+      .limit(1);
+
+    if (result.length === 0) {
+      return reply.status(200).send({ user: null });
+    }
+
+    return reply.send({ user: result[0] });
   });
 
-  // Logout and clear cookie
   fastify.post("/logout", async (request, reply) => {
     const sessionId = request.cookies?.session_id as string | undefined;
-    if (sessionId) sessions.delete(sessionId);
+    if (sessionId) {
+      await db.delete(sessions).where(eq(sessions.id, sessionId));
+    }
     reply.clearCookie("session_id", { path: "/" });
     return reply.send({ ok: true });
   });

@@ -5,6 +5,7 @@ import goalsRoutes from "./routes/goals.ts";
 import milestonesRoutes from "./routes/milestones.ts";
 import evidenceRoutes from "./routes/evidence.ts";
 import authRoutes from "./routes/auth.ts";
+import { authenticateUser } from "./middleware/auth.ts";
 
 const fastify = Fastify({ logger: true });
 
@@ -16,9 +17,9 @@ fastify.register(fastifyCors as any, {
 // Register cookie plugin for session management
 fastify.register(fastifyCookie as any);
 
-fastify.register(goalsRoutes, { prefix: "/goals" });
-fastify.register(milestonesRoutes, { prefix: "/milestones" });
-fastify.register(evidenceRoutes, { prefix: "/evidence" });
+fastify.register(goalsRoutes, { prefix: "/goals", preHandler: authenticateUser });
+fastify.register(milestonesRoutes, { prefix: "/milestones", preHandler: authenticateUser });
+fastify.register(evidenceRoutes, { prefix: "/evidence", preHandler: authenticateUser });
 fastify.register(authRoutes, { prefix: "/auth" });
 
 const start = async () => {
