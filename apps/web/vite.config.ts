@@ -2,8 +2,7 @@ import { defineConfig } from 'vite'
 import { devtools } from '@tanstack/devtools-vite'
 import viteReact from '@vitejs/plugin-react'
 
-// uncomment to enable tailwindcss
-// import tailwindcss from '@tailwindcss/vite'
+import tailwindcss from '@tailwindcss/vite'
 
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import { fileURLToPath, URL } from 'node:url'
@@ -17,7 +16,7 @@ export default defineConfig({
       autoCodeSplitting: true,
     }),
     viteReact(),
-    // tailwindcss(),
+    tailwindcss(),
   ],
   resolve: {
     alias: {

@@ -8,6 +8,8 @@
     "postgres",
     "postgresql",
     "shardulm",
+    "tailwindcss",
     "tanstack"
-  ]
+  ],
+  "postman.settings.dotenv-detection-notification-visibility": false
 }

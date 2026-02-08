@@ -9,3 +9,5 @@ web_old
 
 # Claude Code hooks state
 .claude/pending-doc-updates.json
+
+.*

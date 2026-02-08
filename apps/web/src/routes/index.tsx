@@ -1,68 +1,78 @@
-import { createFileRoute, Link } from "@tanstack/react-router"
-import { useEffect, useState } from "react"
-import type { User, RouterContext } from "@/main"
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useGoogleAuth } from "@/components/providers/GoogleAuth.provider";
 
 export const Route = createFileRoute("/")({
-  component: Home,
-})
+  component: LandingPage,
+});
 
-function Home() {
-  const context = Route.useRouteContext() as RouterContext
-  const [user, setUser] = useState<User>(null)
-  const [isLoading, setIsLoading] = useState(true)
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      const authUser = await context.checkAuthStatus()
-      setUser(authUser)
-      setIsLoading(false)
-    }
-    checkAuth()
-  }, [context])
+function LandingPage() {
+  const { user, isAuthenticated, isLoading, startLoginRedirect } =
+    useGoogleAuth();
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-500">Loading...</div>
+      <div className="min-h-screen bg-linear-to-r from-orange-500 to-amber-600 flex items-center justify-center">
+        <div className="text-white text-lg">Loading...</div>
       </div>
-    )
+    );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-8">
-      <h1 className="text-4xl font-bold text-gray-900 mb-8">Complit</h1>
+    <div className="min-h-screen bg-linear-to-r from-orange-500 to-amber-600 flex flex-col items-center justify-center p-8">
+      <h1 className="text-8xl font-bold text-white mb-8">Complit</h1>
 
-      {user ? (
-        <div className="text-center space-y-4">
-          <p className="text-gray-600">
-            Welcome back, <span className="font-semibold">{user.name || user.email}</span>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 w-full max-w-3xl">
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <h2 className="text-xl font-bold mb-2">Description</h2>
+          <p className="text-gray-700">
+            Complit is an application designed to help save and track projects.
           </p>
-          <div className="flex gap-4">
-            <Link
-              to="/dashboard"
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-            >
-              Go to Dashboard
-            </Link>
-            <Link
-              to="/logout"
-              className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
-            >
-              Logout
-            </Link>
-          </div>
         </div>
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <h2 className="text-xl font-bold mb-2">Objective</h2>
+          <p className="text-gray-700">
+            Create projects easily and creatively, adding details and progress
+            simply.
+          </p>
+        </div>
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <h2 className="text-xl font-bold mb-2">Features</h2>
+          <ul className="text-gray-700 list-disc list-inside">
+            <li>Project creation and management</li>
+            <li>Attractive and cross-platform interface</li>
+            <li>Add details and update progress</li>
+          </ul>
+        </div>
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <h2 className="text-xl font-bold mb-2">Usage</h2>
+          <p className="text-gray-700">
+            Follow the installation instructions and quickly start creating and
+            managing your projects.
+          </p>
+        </div>
+      </div>
+
+      <p className="text-white text-center mb-4">
+        Manage your projects efficiently and creatively with{" "}
+        <span className="font-semibold">Complit</span>.
+      </p>
+
+      {isAuthenticated ? (
+        <Link
+          to="/dashboard"
+          className="px-6 py-3 bg-white text-orange-600 font-bold rounded-full shadow hover:bg-orange-50 transition"
+        >
+          Welcome back, {user?.name || user?.email} — Go to Dashboard
+        </Link>
       ) : (
-        <div className="text-center space-y-4">
-          <p className="text-gray-600">Track your goals and milestones</p>
-          <Link
-            to="/login"
-            className="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-          >
-            Sign In
-          </Link>
-        </div>
+        <button
+          type="button"
+          onClick={startLoginRedirect}
+          className="px-6 py-3 bg-white text-orange-600 font-bold rounded-full shadow hover:bg-orange-50 transition"
+        >
+          SignUp / LogIn with Google
+        </button>
       )}
     </div>
-  )
+  );
 }

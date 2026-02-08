@@ -52,89 +52,92 @@ const plugin: FastifyPluginAsync = async (fastify) => {
       if (!code) return reply.status(400).send({ error: "Missing code" });
       if (!state) return reply.status(400).send({ error: "Missing state" });
 
-    const clientId = process.env.GOOGLE_CLIENT_ID;
-    const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-    if (!clientId || !clientSecret)
-      return reply.status(500).send({ error: "OAuth client not configured" });
+      const clientId = process.env.GOOGLE_CLIENT_ID;
+      const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+      if (!clientId || !clientSecret)
+        return reply.status(500).send({ error: "OAuth client not configured" });
 
-    const serverUrl = _getServerUrl();
-    const redirectUri = `${serverUrl}/auth/callback`;
+      const serverUrl = _getServerUrl();
+      const redirectUri = `${serverUrl}/auth/callback`;
 
-    // Exchange code
-    const body = new URLSearchParams({
-      code,
-      client_id: clientId,
-      client_secret: clientSecret,
-      redirect_uri: redirectUri,
-      grant_type: "authorization_code",
-    });
+      // Exchange code
+      const body = new URLSearchParams({
+        code,
+        client_id: clientId,
+        client_secret: clientSecret,
+        redirect_uri: redirectUri,
+        grant_type: "authorization_code",
+      });
 
-    const tokenRes = await fetch(GOOGLE_OAUTH_TOKEN, {
-      method: "POST",
-      body,
-      headers: { "content-type": "application/x-www-form-urlencoded" },
-    });
-    if (!tokenRes.ok) {
-      const txt = await tokenRes.text();
-      fastify.log.error({ tokenError: txt });
-      return reply.status(502).send({ error: "Token exchange failed" });
-    }
-    const tokenPayload = await tokenRes.json();
+      const tokenRes = await fetch(GOOGLE_OAUTH_TOKEN, {
+        method: "POST",
+        body,
+        headers: { "content-type": "application/x-www-form-urlencoded" },
+      });
+      if (!tokenRes.ok) {
+        const txt = await tokenRes.text();
+        fastify.log.error({ tokenError: txt });
+        return reply.status(502).send({ error: "Token exchange failed" });
+      }
+      const tokenPayload = await tokenRes.json();
 
-    const accessToken = tokenPayload.access_token as string | undefined;
+      const accessToken = tokenPayload.access_token as string | undefined;
 
-    if (!accessToken)
-      return reply.status(502).send({ error: "No access token" });
+      if (!accessToken)
+        return reply.status(502).send({ error: "No access token" });
 
-    // Fetch user_info
-    const userRes = await fetch(GOOGLE_USER_INFO, {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-    if (!userRes.ok) {
-      const txt = await userRes.text();
-      fastify.log.error({ userinfoError: txt });
-      return reply.status(502).send({ error: "Failed to fetch userinfo" });
-    }
-    const userInfo = await userRes.json();
+      // Fetch user_info
+      const userRes = await fetch(GOOGLE_USER_INFO, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      if (!userRes.ok) {
+        const txt = await userRes.text();
+        fastify.log.error({ userInfoError: txt });
+        return reply.status(502).send({ error: "Failed to fetch userInfo" });
+      }
+      const userInfo = await userRes.json();
 
-    const userId = userInfo.sub ?? userInfo.id ?? String(Date.now());
+      const userId = userInfo.sub ?? userInfo.id ?? String(Date.now());
 
-    await db.insert(users).values({
-      id: userId,
-      email: userInfo.email,
-      name: userInfo.name,
-    }).onConflictDoUpdate({
-      target: users.id,
-      set: {
-        email: userInfo.email,
-        name: userInfo.name,
-      },
-    });
+      await db
+        .insert(users)
+        .values({
+          id: userId,
+          email: userInfo.email,
+          name: userInfo.name,
+        })
+        .onConflictDoUpdate({
+          target: users.id,
+          set: {
+            email: userInfo.email,
+            name: userInfo.name,
+          },
+        });
 
-    const sessionId = generateSessionId();
-    const expiresAt = tokenPayload.expires_in
-      ? new Date(Date.now() + tokenPayload.expires_in * 1000)
-      : null;
+      const sessionId = generateSessionId();
+      const expiresAt = tokenPayload.expires_in
+        ? new Date(Date.now() + tokenPayload.expires_in * 1000)
+        : null;
 
-    await db.insert(sessions).values({
-      id: sessionId,
-      userId,
-      accessToken,
-      refreshToken: tokenPayload.refresh_token,
-      expiresAt,
-    });
+      await db.insert(sessions).values({
+        id: sessionId,
+        userId,
+        accessToken,
+        refreshToken: tokenPayload.refresh_token,
+        expiresAt,
+      });
 
-    // Cookie options: secure if running under HTTPS (NODE_ENV=production)
-    const cookieOptions = {
-      httpOnly: true,
-      path: "/",
-      sameSite: "lax" as const,
-      secure: process.env.NODE_ENV === "production",
-    };
-    reply.setCookie("session_id", sessionId, cookieOptions);
+      // Cookie options: secure if running under HTTPS (NODE_ENV=production)
+      const cookieOptions = {
+        httpOnly: true,
+        path: "/",
+        sameSite: "lax" as const,
+        secure: process.env.NODE_ENV === "production",
+      };
+      reply.setCookie("session_id", sessionId, cookieOptions);
 
       return reply.redirect(_getFrontendUrl());
-    }
+    },
   );
 
   fastify.get("/me", async (request, reply) => {
