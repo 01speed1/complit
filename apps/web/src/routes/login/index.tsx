@@ -1,7 +1,7 @@
 import { createFileRoute, redirect } from "@tanstack/react-router"
 import type { RouterContext } from "@/main"
 
-const API_BASE = (import.meta.env.VITE_API_URL as string) || ""
+const API_BASE = "/api"
 
 export const Route = createFileRoute("/login/")({
   beforeLoad: async ({ context }) => {

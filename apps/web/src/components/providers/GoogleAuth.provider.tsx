@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, createContext, useContext, type ReactNode } from "react";
 
-const API_BASE = (import.meta.env.VITE_API_URL as string) || "";
+const API_BASE = "/api";
 
 type User = { id?: string; email?: string; name?: string } | null;
 

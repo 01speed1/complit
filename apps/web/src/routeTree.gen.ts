@@ -14,6 +14,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as LogoutIndexRouteImport } from './routes/logout/index'
 import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as AuthDashboardRouteImport } from './routes/_auth/dashboard'
+import { Route as AuthGoalsNewRouteImport } from './routes/_auth/goals.new'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/_auth',
@@ -39,18 +40,25 @@ const AuthDashboardRoute = AuthDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthRoute,
 } as any)
+const AuthGoalsNewRoute = AuthGoalsNewRouteImport.update({
+  id: '/goals/new',
+  path: '/goals/new',
+  getParentRoute: () => AuthRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof AuthDashboardRoute
   '/login': typeof LoginIndexRoute
   '/logout': typeof LogoutIndexRoute
+  '/goals/new': typeof AuthGoalsNewRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof AuthDashboardRoute
   '/login': typeof LoginIndexRoute
   '/logout': typeof LogoutIndexRoute
+  '/goals/new': typeof AuthGoalsNewRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -59,13 +67,21 @@ export interface FileRoutesById {
   '/_auth/dashboard': typeof AuthDashboardRoute
   '/login/': typeof LoginIndexRoute
   '/logout/': typeof LogoutIndexRoute
+  '/_auth/goals/new': typeof AuthGoalsNewRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dashboard' | '/login' | '/logout'
+  fullPaths: '/' | '/dashboard' | '/login' | '/logout' | '/goals/new'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/login' | '/logout'
-  id: '__root__' | '/' | '/_auth' | '/_auth/dashboard' | '/login/' | '/logout/'
+  to: '/' | '/dashboard' | '/login' | '/logout' | '/goals/new'
+  id:
+    | '__root__'
+    | '/'
+    | '/_auth'
+    | '/_auth/dashboard'
+    | '/login/'
+    | '/logout/'
+    | '/_auth/goals/new'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -112,15 +128,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthDashboardRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/_auth/goals/new': {
+      id: '/_auth/goals/new'
+      path: '/goals/new'
+      fullPath: '/goals/new'
+      preLoaderRoute: typeof AuthGoalsNewRouteImport
+      parentRoute: typeof AuthRoute
+    }
   }
 }
 
 interface AuthRouteChildren {
   AuthDashboardRoute: typeof AuthDashboardRoute
+  AuthGoalsNewRoute: typeof AuthGoalsNewRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthDashboardRoute: AuthDashboardRoute,
+  AuthGoalsNewRoute: AuthGoalsNewRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)

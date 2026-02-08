@@ -6,7 +6,7 @@ import { routeTree } from './routeTree.gen'
 
 import './styles.css'
 
-const API_BASE = (import.meta.env.VITE_API_URL as string) || ""
+const API_BASE = "/api"
 
 export type User = { id: string; email?: string; name?: string } | null
 

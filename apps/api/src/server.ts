@@ -17,9 +17,12 @@ fastify.register(fastifyCors as any, {
 // Register cookie plugin for session management
 fastify.register(fastifyCookie as any);
 
-fastify.register(goalsRoutes, { prefix: "/goals", preHandler: authenticateUser });
-fastify.register(milestonesRoutes, { prefix: "/milestones", preHandler: authenticateUser });
-fastify.register(evidenceRoutes, { prefix: "/evidence", preHandler: authenticateUser });
+fastify.register(async (instance) => {
+  instance.addHook("preHandler", authenticateUser);
+  instance.register(goalsRoutes, { prefix: "/goals" });
+  instance.register(milestonesRoutes, { prefix: "/milestones" });
+  instance.register(evidenceRoutes, { prefix: "/evidence" });
+});
 fastify.register(authRoutes, { prefix: "/auth" });
 
 const start = async () => {

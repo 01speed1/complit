@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { useEffect, useState } from "react"
 
-const API_BASE = (import.meta.env.VITE_API_URL as string) || ""
+const API_BASE = "/api"
 
 export const Route = createFileRoute("/logout/")({
   component: LogoutPage,
