@@ -1,7 +1,6 @@
 import { createFileRoute, redirect } from "@tanstack/react-router"
 import type { RouterContext } from "@/main"
-
-const API_BASE = "/api"
+import { api } from "@/api"
 
 export const Route = createFileRoute("/login/")({
   beforeLoad: async ({ context }) => {
@@ -17,7 +16,7 @@ export const Route = createFileRoute("/login/")({
 
 function Login() {
   const startLogin = () => {
-    window.location.href = `${API_BASE}/auth/better`
+    window.location.href = api.auth.getLoginUrl()
   }
 
   return (

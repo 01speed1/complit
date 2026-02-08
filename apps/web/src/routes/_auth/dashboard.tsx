@@ -1,21 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState, useEffect } from "react"
-import type { User } from "@/main"
-
-const API_BASE = "/api"
-
-interface Goal {
-  id: string
-  title: string
-  description: string | null
-  targetDescription: string | null
-  durationInMonths: number | null
-  priority: "low" | "medium" | "high"
-  status: "active" | "completed" | "paused"
-  order: number
-  createdAt: string
-  completedAt: string | null
-}
+import type { User, Goal } from "@complit/api-client"
+import { api } from "@/api"
 
 export const Route = createFileRoute("/_auth/dashboard")({
   component: Dashboard,
@@ -87,11 +73,8 @@ function Dashboard() {
   useEffect(() => {
     const fetchGoals = async () => {
       try {
-        const response = await fetch(`${API_BASE}/goals`, { credentials: "include" })
-        if (response.ok) {
-          const data = await response.json()
-          setGoals(data)
-        }
+        const data = await api.goals.getAll()
+        setGoals(data)
       } finally {
         setIsLoadingGoals(false)
       }

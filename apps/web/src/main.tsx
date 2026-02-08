@@ -1,30 +1,21 @@
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
+import type { User } from '@complit/api-client'
 
+import { api } from './api'
 import { routeTree } from './routeTree.gen'
 
 import './styles.css'
 
-const API_BASE = "/api"
-
-export type User = { id: string; email?: string; name?: string } | null
+export type { User }
 
 export interface RouterContext {
-  checkAuthStatus: () => Promise<User>
+  checkAuthStatus: () => Promise<User | null>
 }
 
-async function checkAuthStatus(): Promise<User> {
-  try {
-    const res = await fetch(`${API_BASE}/auth/me`, { credentials: "include" })
-    if (res.ok) {
-      const payload = await res.json()
-      return payload.user ?? null
-    }
-    return null
-  } catch {
-    return null
-  }
+async function checkAuthStatus(): Promise<User | null> {
+  return api.auth.getCurrentUser()
 }
 
 const router = createRouter({

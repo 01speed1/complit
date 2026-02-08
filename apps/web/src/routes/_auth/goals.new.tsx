@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
 import { useState } from "react"
-
-const API_BASE = "/api"
+import type { CreateGoalPayload } from "@complit/api-client"
+import { api } from "@/api"
 
 export const Route = createFileRoute("/_auth/goals/new")({
   component: NewGoal,
@@ -18,24 +18,18 @@ function NewGoal() {
     const formData = new FormData(event.currentTarget)
     const durationRawValue = formData.get("durationInMonths") as string
 
-    const body = {
+    const payload: CreateGoalPayload = {
       title: formData.get("title") as string,
       description: (formData.get("description") as string) || undefined,
       targetDescription: (formData.get("targetDescription") as string) || undefined,
       durationInMonths: durationRawValue ? Number(durationRawValue) : undefined,
-      priority: formData.get("priority") as "low" | "medium" | "high",
+      priority: formData.get("priority") as CreateGoalPayload["priority"],
     }
 
-    const response = await fetch(`${API_BASE}/goals`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify(body),
-    })
-
-    if (response.ok) {
+    try {
+      await api.goals.create(payload)
       navigate({ to: "/dashboard" })
-    } else {
+    } catch {
       setIsSubmitting(false)
     }
   }

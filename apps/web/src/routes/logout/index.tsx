@@ -1,7 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { useEffect, useState } from "react"
-
-const API_BASE = "/api"
+import { api } from "@/api"
 
 export const Route = createFileRoute("/logout/")({
   component: LogoutPage,
@@ -14,10 +13,7 @@ function LogoutPage() {
   useEffect(() => {
     const performLogout = async () => {
       try {
-        await fetch(`${API_BASE}/auth/logout`, {
-          method: "POST",
-          credentials: "include",
-        })
+        await api.auth.logout()
         setStatus("success")
         setTimeout(() => {
           navigate({ to: "/login" })

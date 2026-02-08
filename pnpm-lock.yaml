@@ -48,6 +48,9 @@ importers:
 
   apps/web:
     dependencies:
+      '@complit/api-client':
+        specifier: workspace:*
+        version: link:../../packages/api-client
       '@tailwindcss/vite':
         specifier: 4.1.18
         version: 4.1.18(vite@7.1.7(@types/node@22.10.2)(jiti@2.6.1)(lightningcss@1.30.2)(tsx@4.20.6))
@@ -103,6 +106,8 @@ importers:
       vitest:
         specifier: 3.0.5
         version: 3.0.5(@types/node@22.10.2)(jiti@2.6.1)(jsdom@27.0.0)(lightningcss@1.30.2)(tsx@4.20.6)
+
+  packages/api-client: {}
 
 packages:
 

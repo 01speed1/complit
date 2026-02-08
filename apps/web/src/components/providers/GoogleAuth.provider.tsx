@@ -1,11 +1,9 @@
 import { useState, useEffect, useMemo, createContext, useContext, type ReactNode } from "react";
-
-const API_BASE = "/api";
-
-type User = { id?: string; email?: string; name?: string } | null;
+import type { User } from "@complit/api-client";
+import { api } from "@/api";
 
 interface AuthContextType {
-  user: User;
+  user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
   startLoginRedirect: () => void;
@@ -16,20 +14,15 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const refreshUser = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/auth/me`, { credentials: "include" });
-      if (res.ok) {
-        const payload = await res.json();
-        setUser(payload.user ?? null);
-      } else {
-        setUser(null);
-      }
-    } catch (err) {
+      const currentUser = await api.auth.getCurrentUser();
+      setUser(currentUser);
+    } catch {
       setUser(null);
     } finally {
       setIsLoading(false);
@@ -41,13 +34,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const startLoginRedirect = () => {
-    window.location.href = `${API_BASE}/auth/better`;
+    window.location.href = api.auth.getLoginUrl();
   };
 
   const logout = async () => {
     setIsLoading(true);
     try {
-      await fetch(`${API_BASE}/auth/logout`, { method: "POST", credentials: "include" });
+      await api.auth.logout();
       setUser(null);
     } catch (err) {
       console.error(err);
